@@ -246,6 +246,10 @@ module AWS
         super
         @key = key
         @bucket = bucket
+        
+        @etag = opts[:etag]
+        @content_length = opts[:content_length]
+        @last_modified = opts[:last_modified]
       end
 
       # @return [String] The objects unique key
@@ -303,19 +307,19 @@ module AWS
       #
       # @return [String] Returns the object's ETag
       def etag
-        head.etag
+        @etag ||= head.etag
       end
 
       # Returns the object's last modified time.
       #
       # @return [Time] Returns the object's last modified time.
       def last_modified
-        head.last_modified
+        @last_modified ||= head.last_modified
       end
 
       # @return [Integer] Size of the object in bytes.
       def content_length
-        head.content_length
+        @content_length ||= head.content_length
       end
 
       # @note S3 does not compute content-type.  It reports the content-type

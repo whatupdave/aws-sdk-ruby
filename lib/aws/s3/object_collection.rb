@@ -287,7 +287,12 @@ module AWS
       def each_member_in_page(page, &block)
         super
         page.contents.each do |content|
-          yield(S3Object.new(bucket, content.key))
+          metadata = {
+            last_modified: content.last_modified,
+            etag: content.etag,
+            content_length: content.size.to_i,
+          }
+          yield(S3Object.new(bucket, content.key, metadata))
         end
       end
 
