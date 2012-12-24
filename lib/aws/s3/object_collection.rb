@@ -311,7 +311,7 @@ module AWS
       # @private
       protected
       def next_markers page
-        marker = page.next_marker || (last = page.contents.last and last.key)
+        marker = page[:next_marker] || (last = page.contents.last and last.key)
         if marker.nil?
           raise 'Unable to find marker in S3 list objects response'
         else
