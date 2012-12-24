@@ -288,9 +288,9 @@ module AWS
         super
         page.contents.each do |content|
           metadata = {
-            last_modified: content.last_modified,
-            etag: content.etag,
-            content_length: content.size.to_i,
+            last_modified: content[:last_modified],
+            etag: content[:etag],
+            content_length: (content[:size] and content[:size].to_i),
           }
           yield(S3Object.new(bucket, content.key, metadata))
         end
@@ -311,7 +311,7 @@ module AWS
       # @private
       protected
       def next_markers page
-        marker = (last = page.contents.last and last.key)
+        marker = page.next_marker || (last = page.contents.last and last.key)
         if marker.nil?
           raise 'Unable to find marker in S3 list objects response'
         else
